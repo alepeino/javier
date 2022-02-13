@@ -8,9 +8,14 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'remix'
+import styles from './root.css'
 
 export const meta: MetaFunction = () => {
   return { title: 'New Remix App' }
+}
+
+export function links() {
+  return [{ rel: 'stylesheet', href: styles }]
 }
 
 function Document({ children }: { children: React.ReactNode }) {
