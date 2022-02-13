@@ -36,7 +36,7 @@ export default function TransactionsIndex() {
             <IconButton
               as="span"
               size="lg"
-              colorScheme="blue"
+              colorScheme="primary"
               aria-label="Registrar transacción"
               icon={<AddIcon />}
               borderRadius="100%"
@@ -52,7 +52,7 @@ export default function TransactionsIndex() {
           justifyContent="flex-end"
         >
           <Link to="registrar">
-            <Button as="span" colorScheme="blue">
+            <Button as="span" colorScheme="primary">
               Registrar transacción
             </Button>
           </Link>

@@ -9,6 +9,7 @@ import {
   ScrollRestoration,
 } from 'remix'
 import styles from './root.css'
+import { theme } from '~/theme'
 
 export const meta: MetaFunction = () => {
   return { title: 'New Remix App' }
@@ -28,7 +29,7 @@ function Document({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <ChakraProvider>{children}</ChakraProvider>
+        <ChakraProvider theme={theme}>{children}</ChakraProvider>
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === 'development' && <LiveReload />}
