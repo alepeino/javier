@@ -35,7 +35,7 @@ export function read(): Promise<Transaction[]> {
   return sheets.spreadsheets.values
     .get({
       spreadsheetId,
-      range: 'a2:h',
+      range: 'Sorted!a:h',
       dateTimeRenderOption: 'FORMATTED_STRING',
       valueRenderOption: 'UNFORMATTED_VALUE',
     })

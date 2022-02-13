@@ -20,24 +20,18 @@ export const TransactionTable = ({ transactions }: Props) => {
   const columns: Column<Transaction>[] = useMemo(() => {
     return [
       {
-        Header: 'Fecha',
-        accessor: 'date',
-      },
-      {
-        Header: 'Compra',
-        accessor: 'buyRate',
-        isNumeric: true,
-        Cell: ({ value }) => currencyFormatter.format(value),
-      },
-      {
-        Header: 'Venta',
-        accessor: 'sellRate',
-        isNumeric: true,
-        Cell: ({ value }) => currencyFormatter.format(value),
-      },
-      {
         Header: 'Cliente',
         accessor: 'customer',
+      },
+      {
+        Header: 'Tipo de operación',
+        accessor: 'operation',
+      },
+      {
+        Header: 'Tipo de cambio',
+        accessor: 'exchangeRate',
+        isNumeric: true,
+        Cell: ({ value }) => currencyFormatter.format(value),
       },
       {
         Header: 'Monto (USD)',
@@ -45,13 +39,19 @@ export const TransactionTable = ({ transactions }: Props) => {
         isNumeric: true,
         Cell: ({ value }) => currencyFormatter.format(value),
       },
+      {
+        Header: 'Diferencial (ARS)',
+        accessor: 'deltaARS',
+        isNumeric: true,
+        Cell: ({ value }) => currencyFormatter.format(value!),
+      },
     ]
   }, [])
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy)
 
   return (
-    <Table {...getTableProps()}>
+    <Table {...getTableProps()} size="sm" colorScheme="primary">
       <Thead>
         {headerGroups.map(headerGroup => (
           <Tr {...headerGroup.getHeaderGroupProps()}>

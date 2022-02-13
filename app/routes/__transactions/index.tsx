@@ -1,10 +1,9 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, Heading, IconButton } from '@chakra-ui/react'
-import type { ActionFunction, LoaderFunction } from 'remix'
+import type { LoaderFunction } from 'remix'
 import { Link, useLoaderData } from 'remix'
-import invariant from 'tiny-invariant'
 import { TransactionTable } from '~/components/TransactionTable'
-import { read, write } from '~/lib/sheets.server'
+import { read } from '~/lib/sheets.server'
 import type { Transaction } from '~/model/transaction'
 
 type LoaderData = Transaction[]
