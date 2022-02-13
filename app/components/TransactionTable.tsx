@@ -4,15 +4,10 @@ import { chakra, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import type { Column } from 'react-table'
 import { useSortBy, useTable } from 'react-table'
-import type { LoaderFunction } from 'remix'
-import { useLoaderData } from 'remix'
-import { read } from '~/lib/sheets.server'
 import type { Transaction } from '~/model/transaction'
 
-type LoaderData = Transaction[]
-
-export const loader: LoaderFunction = async () => {
-  return read()
+interface Props {
+  transactions: Transaction[]
 }
 
 const currencyFormatter = new Intl.NumberFormat(undefined, {
@@ -20,8 +15,7 @@ const currencyFormatter = new Intl.NumberFormat(undefined, {
   currency: 'USD',
 })
 
-export default function Index() {
-  const transactions = useLoaderData<LoaderData>()
+export const TransactionTable = ({ transactions }: Props) => {
   const data = useMemo(() => transactions, [transactions])
   const columns: Column<Transaction>[] = useMemo(() => {
     return [
