@@ -13,14 +13,6 @@ export const loader: LoaderFunction = async () => {
   return read()
 }
 
-export const action: ActionFunction = async ({ request }) => {
-  invariant(false, 'a')
-  const formData = await request.formData()
-  const res = await write()
-  // console.log(formData)
-  return null
-}
-
 export default function TransactionsIndex() {
   const transactions = useLoaderData<LoaderData>()
 

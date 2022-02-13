@@ -24,13 +24,11 @@ const spreadsheetId = process.env.SPREADSHEET_ID
 
 const HEADERS: Array<keyof Transaction> = [
   'date',
-  'buyRate',
-  'sellRate',
+  'exchangeRate',
   'customer',
   'operation',
   'amountUSD',
-  'effectiveRate',
-  'profitARS',
+  'deltaARS',
 ]
 
 export function read(): Promise<Transaction[]> {
@@ -44,7 +42,7 @@ export function read(): Promise<Transaction[]> {
     .then(pipe(get('data.values'), map(zipObject(HEADERS))))
 }
 
-export function write() {
+export function write(transaction: Transaction) {
   return sheets.spreadsheets.values.append({
     spreadsheetId,
     range: 'a:a',
@@ -53,14 +51,12 @@ export function write() {
     requestBody: {
       values: [
         [
-          new Date(2022, 2, 8).toISOString().slice(0, 10),
-          220,
-          230,
-          'D',
-          'VENTA',
-          500,
-          229,
-          '=INDIRECT("R[0]C[-2]"; false) * (MIN(INDIRECT("R[0]C[-5]"; false); INDIRECT("R[0]C[-1]"; false)) - INDIRECT("R[0]C[-6]"; false))',
+          transaction.date.toISOString().slice(0, 10),
+          transaction.exchangeRate,
+          transaction.customer,
+          transaction.operation,
+          transaction.amountUSD,
+          '=INDIRECT("R[0]C[-1]"; false) * INDIRECT("R[0]C[-4]"; false) * IF(EQ(INDIRECT("R[0]C[-2]"; false); "VENTA"); 1; -1)',
         ],
       ],
     },
