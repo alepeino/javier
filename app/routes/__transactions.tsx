@@ -3,7 +3,7 @@ import { Outlet } from 'remix'
 
 export default function TransactionsLayout() {
   return (
-    <Container>
+    <Container maxW="xl">
       <Outlet />
     </Container>
   )
