@@ -53,6 +53,8 @@ export default function TransactionsIndex() {
   const dayBefore = subDays(1, day)
   const dayAfter = addDays(1, day)
 
+  const registerHref = `../registrar?date=${date}`
+
   return (
     <Stack spacing={4}>
       <HStack justifyContent="space-between">
@@ -65,7 +67,9 @@ export default function TransactionsIndex() {
             borderRadius="100%"
           />
         </Link>
-        <Heading>{dayFormatter.format(day)}</Heading>
+        <Heading size="lg" as="h1" aria-describedby="title-description">
+          {dayFormatter.format(day)}
+        </Heading>
         <Link to={`../${dateInYMD(dayAfter)}`}>
           <IconButton
             as="span"
@@ -84,8 +88,8 @@ export default function TransactionsIndex() {
               <StatNumber>
                 {currencyFormatter.format(sumBy('deltaARS', transactions))}
               </StatNumber>
-              <StatHelpText>
-                {transactions.length}{' '}
+              <StatHelpText id="title-description">
+                {transactions.length}
                 {transactions.length > 1 ? 'transacciones' : 'transacción'}
               </StatHelpText>
             </Stat>
@@ -93,37 +97,39 @@ export default function TransactionsIndex() {
             <Box overflow="auto">
               <TransactionTable transactions={transactions} />
             </Box>
-
-            <Box display={{ base: 'block', md: 'none' }}>
-              <Link to="../registrar">
-                <IconButton
-                  as="span"
-                  size="lg"
-                  colorScheme="primary"
-                  aria-label="Registrar transacción"
-                  icon={<AddIcon />}
-                  borderRadius="100%"
-                  position="absolute"
-                  bottom="1rem"
-                  right="1rem"
-                />
-              </Link>
-            </Box>
-            <Box
-              display={{ base: 'none', md: 'flex' }}
-              mt={4}
-              justifyContent="flex-end"
-            >
-              <Link to="../registrar">
-                <Button as="span" colorScheme="primary">
-                  Registrar transacción
-                </Button>
-              </Link>
-            </Box>
           </Stack>
         ) : (
-          <Text>No hay transacciones registradas en esta fecha</Text>
+          <Text id="title-description">
+            No hay transacciones registradas en esta fecha
+          </Text>
         )}
+
+        <Box display={{ base: 'block', md: 'none' }}>
+          <Link to={registerHref}>
+            <IconButton
+              as="span"
+              size="lg"
+              colorScheme="primary"
+              aria-label="Registrar transacción"
+              icon={<AddIcon />}
+              borderRadius="100%"
+              position="absolute"
+              bottom="1rem"
+              right="1rem"
+            />
+          </Link>
+        </Box>
+        <Box
+          display={{ base: 'none', md: 'flex' }}
+          mt={4}
+          justifyContent="flex-end"
+        >
+          <Link to={registerHref}>
+            <Button as="span" colorScheme="primary">
+              Registrar transacción
+            </Button>
+          </Link>
+        </Box>
       </main>
     </Stack>
   )

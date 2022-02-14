@@ -8,11 +8,22 @@ import {
   Stack,
   useId,
 } from '@chakra-ui/react'
-import type { ActionFunction } from 'remix'
-import { Form, redirect } from 'remix'
+import type { ActionFunction, LoaderFunction } from 'remix'
+import { Form, redirect, useLoaderData } from 'remix'
 import { dateInYMD } from '~/lib/date'
 import { write } from '~/lib/sheets.server'
 import { transactionSchema } from '~/model/transaction'
+
+interface LoaderData {
+  date: string | null
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const params = new URL(request.url).searchParams
+  return {
+    date: params.get('date') || null,
+  }
+}
 
 export const action: ActionFunction = async ({ request }) => {
   try {
@@ -27,6 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function RegisterTransactionForm() {
+  const { date } = useLoaderData<LoaderData>()
   const formId = useId()
 
   return (
@@ -38,7 +50,7 @@ export default function RegisterTransactionForm() {
             id={`${formId}-date`}
             name="date"
             type="date"
-            defaultValue={dateInYMD()}
+            defaultValue={date || dateInYMD()}
           />
         </FormControl>
 
