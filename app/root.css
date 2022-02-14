@@ -1,3 +1,6 @@
-html, html>body {
-    min-height: 100vh;
+html{
+    height: 100%;
+}
+body {
+    min-height: 100%;
 }
