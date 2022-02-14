@@ -5,6 +5,6 @@ export const currencyFormatter = new Intl.NumberFormat(undefined, {
 
 export const dayFormatter = new Intl.DateTimeFormat([], {
   weekday: 'long',
-  month: 'long',
+  month: 'short',
   day: 'numeric',
 })

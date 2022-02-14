@@ -58,7 +58,7 @@ export default function TransactionsIndex() {
   return (
     <Stack spacing={4}>
       <HStack justifyContent="space-between">
-        <Link to={`../${dateInYMD(dayBefore)}`}>
+        <Link to={`../${dateInYMD(dayBefore)}`} prefetch="intent">
           <IconButton
             as="span"
             colorScheme="purple"
@@ -70,7 +70,7 @@ export default function TransactionsIndex() {
         <Heading size="lg" as="h1" aria-describedby="title-description">
           {dayFormatter.format(day)}
         </Heading>
-        <Link to={`../${dateInYMD(dayAfter)}`}>
+        <Link to={`../${dateInYMD(dayAfter)}`} prefetch="intent">
           <IconButton
             as="span"
             colorScheme="purple"
