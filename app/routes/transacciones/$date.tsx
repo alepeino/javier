@@ -89,7 +89,7 @@ export default function TransactionsIndex() {
                 {currencyFormatter.format(sumBy('deltaARS', transactions))}
               </StatNumber>
               <StatHelpText id="title-description">
-                {transactions.length}
+                {transactions.length}{' '}
                 {transactions.length > 1 ? 'transacciones' : 'transacción'}
               </StatHelpText>
             </Stat>
