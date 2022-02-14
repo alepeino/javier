@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import type { ActionFunction } from 'remix'
 import { Form, redirect } from 'remix'
+import { dateInYMD } from '~/lib/date'
 import { write } from '~/lib/sheets.server'
 import { transactionSchema } from '~/model/transaction'
 
@@ -37,7 +38,7 @@ export default function RegisterTransactionForm() {
             id={`${formId}-date`}
             name="date"
             type="date"
-            defaultValue={new Date().toISOString().slice(0, 10)}
+            defaultValue={dateInYMD()}
           />
         </FormControl>
 

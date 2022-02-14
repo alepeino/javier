@@ -3,21 +3,41 @@ import { Box, Button, Heading, IconButton } from '@chakra-ui/react'
 import type { LoaderFunction } from 'remix'
 import { Link, useLoaderData } from 'remix'
 import { TransactionTable } from '~/components/TransactionTable'
+import { fromYMD } from '~/lib/date'
 import { read } from '~/lib/sheets.server'
 import type { Transaction } from '~/model/transaction'
 
-type LoaderData = Transaction[]
+interface LoaderData {
+  date: string
+  transactions: Transaction[]
+}
 
-export const loader: LoaderFunction = async () => {
-  return read()
+export const loader: LoaderFunction = async ({ params }) => {
+  if (!params.date) {
+    throw new Response('Date must be provided', { status: 400 })
+  }
+  if (!params.date.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
+    throw new Response('Date must be in YYYY-MM-DD format', { status: 400 })
+  }
+  try {
+    const selectedDate = fromYMD(params.date)
+    const transactions = await read(selectedDate)
+
+    return {
+      date: params.date,
+      transactions,
+    }
+  } catch (e) {
+    throw new Response((e as Error).stack, { status: 500 })
+  }
 }
 
 export default function TransactionsIndex() {
-  const transactions = useLoaderData<LoaderData>()
+  const { date, transactions } = useLoaderData<LoaderData>()
 
   return (
     <>
-      <Heading>{new Date().toISOString()}</Heading>
+      <Heading>{date}</Heading>
       <main>
         <Box overflow="auto">
           <TransactionTable transactions={transactions} />

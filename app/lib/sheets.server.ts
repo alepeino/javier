@@ -1,6 +1,7 @@
 import { google } from 'googleapis'
 import { get, map, pipe, zipObject } from 'lodash/fp'
 import invariant from 'tiny-invariant'
+import { dateInYMD } from '~/lib/date'
 import type { Transaction } from '~/model/transaction'
 
 invariant(!!process.env.GOOGLE_AUTH, 'GOOGLE_AUTH missing')
@@ -31,11 +32,17 @@ const HEADERS: Array<keyof Transaction> = [
   'deltaARS',
 ]
 
-export function read(): Promise<Transaction[]> {
+export async function read(date: Date): Promise<Transaction[]> {
+  const bounds = await findDateBounds(date)
+
+  if (!bounds.valid) {
+    return []
+  }
+
   return sheets.spreadsheets.values
     .get({
       spreadsheetId,
-      range: 'Sorted!a:h',
+      range: `Sorted!A${bounds.from}:F${bounds.to}`,
       dateTimeRenderOption: 'FORMATTED_STRING',
       valueRenderOption: 'UNFORMATTED_VALUE',
     })
@@ -61,4 +68,25 @@ export function write(transaction: Transaction) {
       ],
     },
   })
+}
+
+async function findDateBounds(date: Date) {
+  const { data } = await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: 'Filters!a1:c1',
+    includeValuesInResponse: true,
+    valueInputOption: 'USER_ENTERED',
+    requestBody: {
+      values: [[dateInYMD(date)]],
+    },
+  })
+  let [[, from, to]] = data.updatedData!.values as any[]
+  from = Number(from)
+  to = Number(to)
+
+  return {
+    from: Number(from),
+    to: Number(to),
+    valid: !(isNaN(from) || isNaN(to)),
+  }
 }
