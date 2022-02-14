@@ -1,9 +1,18 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { Box, Button, Heading, IconButton, Text } from '@chakra-ui/react'
+import { AddIcon, ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons'
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  IconButton,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
+import { addDays, subDays } from 'date-fns/fp'
 import type { LoaderFunction } from 'remix'
 import { Link, useLoaderData } from 'remix'
 import { TransactionTable } from '~/components/TransactionTable'
-import { fromYMD } from '~/lib/date'
+import { dateInYMD, fromYMD } from '~/lib/date'
 import { read } from '~/lib/sheets.server'
 import type { Transaction } from '~/model/transaction'
 
@@ -11,6 +20,12 @@ interface LoaderData {
   date: string
   transactions: Transaction[]
 }
+
+const dayFormat = new Intl.DateTimeFormat([], {
+  weekday: 'long',
+  month: 'long',
+  day: 'numeric',
+})
 
 export const loader: LoaderFunction = async ({ params }) => {
   if (!params.date) {
@@ -34,10 +49,33 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function TransactionsIndex() {
   const { date, transactions } = useLoaderData<LoaderData>()
+  const day = fromYMD(date)
+  const dayBefore = subDays(1, day)
+  const dayAfter = addDays(1, day)
 
   return (
-    <>
-      <Heading>{date}</Heading>
+    <Stack spacing={4}>
+      <HStack justifyContent="space-between">
+        <Link to={`../${dateInYMD(dayBefore)}`}>
+          <IconButton
+            as="span"
+            colorScheme="purple"
+            aria-label={dayFormat.format(dayBefore)}
+            icon={<ArrowLeftIcon />}
+            borderRadius="100%"
+          />
+        </Link>
+        <Heading>{dayFormat.format(day)}</Heading>
+        <Link to={`../${dateInYMD(dayAfter)}`}>
+          <IconButton
+            as="span"
+            colorScheme="purple"
+            aria-label={dayFormat.format(dayAfter)}
+            icon={<ArrowRightIcon />}
+            borderRadius="100%"
+          />
+        </Link>
+      </HStack>
       <main>
         {transactions.length ? (
           <>
@@ -75,6 +113,6 @@ export default function TransactionsIndex() {
           <Text>No hay transacciones registradas en esta fecha</Text>
         )}
       </main>
-    </>
+    </Stack>
   )
 }
