@@ -6,13 +6,19 @@ import {
   HStack,
   IconButton,
   Stack,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
   Text,
 } from '@chakra-ui/react'
 import { addDays, subDays } from 'date-fns/fp'
+import { sumBy } from 'lodash/fp'
 import type { LoaderFunction } from 'remix'
 import { Link, useLoaderData } from 'remix'
 import { TransactionTable } from '~/components/TransactionTable'
 import { dateInYMD, fromYMD } from '~/lib/date'
+import { currencyFormatter, dayFormatter } from '~/lib/intl-format'
 import { read } from '~/lib/sheets.server'
 import type { Transaction } from '~/model/transaction'
 
@@ -20,12 +26,6 @@ interface LoaderData {
   date: string
   transactions: Transaction[]
 }
-
-const dayFormat = new Intl.DateTimeFormat([], {
-  weekday: 'long',
-  month: 'long',
-  day: 'numeric',
-})
 
 export const loader: LoaderFunction = async ({ params }) => {
   if (!params.date) {
@@ -60,17 +60,17 @@ export default function TransactionsIndex() {
           <IconButton
             as="span"
             colorScheme="purple"
-            aria-label={dayFormat.format(dayBefore)}
+            aria-label={dayFormatter.format(dayBefore)}
             icon={<ArrowLeftIcon />}
             borderRadius="100%"
           />
         </Link>
-        <Heading>{dayFormat.format(day)}</Heading>
+        <Heading>{dayFormatter.format(day)}</Heading>
         <Link to={`../${dateInYMD(dayAfter)}`}>
           <IconButton
             as="span"
             colorScheme="purple"
-            aria-label={dayFormat.format(dayAfter)}
+            aria-label={dayFormatter.format(dayAfter)}
             icon={<ArrowRightIcon />}
             borderRadius="100%"
           />
@@ -78,10 +78,22 @@ export default function TransactionsIndex() {
       </HStack>
       <main>
         {transactions.length ? (
-          <>
+          <Stack spacing={8}>
+            <Stat textAlign="center">
+              <StatLabel>Total del día (ARS):</StatLabel>
+              <StatNumber>
+                {currencyFormatter.format(sumBy('deltaARS', transactions))}
+              </StatNumber>
+              <StatHelpText>
+                {transactions.length}{' '}
+                {transactions.length > 1 ? 'transacciones' : 'transacción'}
+              </StatHelpText>
+            </Stat>
+
             <Box overflow="auto">
               <TransactionTable transactions={transactions} />
             </Box>
+
             <Box display={{ base: 'block', md: 'none' }}>
               <Link to="../registrar">
                 <IconButton
@@ -108,7 +120,7 @@ export default function TransactionsIndex() {
                 </Button>
               </Link>
             </Box>
-          </>
+          </Stack>
         ) : (
           <Text>No hay transacciones registradas en esta fecha</Text>
         )}

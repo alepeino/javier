@@ -4,16 +4,12 @@ import { chakra, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import type { Column } from 'react-table'
 import { useSortBy, useTable } from 'react-table'
+import { currencyFormatter } from '~/lib/intl-format'
 import type { Transaction } from '~/model/transaction'
 
 interface Props {
   transactions: Transaction[]
 }
-
-const currencyFormatter = new Intl.NumberFormat(undefined, {
-  style: 'currency',
-  currency: 'USD',
-})
 
 export const TransactionTable = ({ transactions }: Props) => {
   const data = useMemo(() => transactions, [transactions])
@@ -43,7 +39,7 @@ export const TransactionTable = ({ transactions }: Props) => {
         Header: 'Diferencial (ARS)',
         accessor: 'deltaARS',
         isNumeric: true,
-        Cell: ({ value }) => currencyFormatter.format(value!),
+        Cell: ({ value }) => value && currencyFormatter.format(value),
       },
     ]
   }, [])
