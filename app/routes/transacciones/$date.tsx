@@ -43,7 +43,7 @@ export default function TransactionsIndex() {
           <TransactionTable transactions={transactions} />
         </Box>
         <Box display={{ base: 'block', md: 'none' }}>
-          <Link to="registrar">
+          <Link to="../registrar">
             <IconButton
               as="span"
               size="lg"
@@ -62,7 +62,7 @@ export default function TransactionsIndex() {
           mt={4}
           justifyContent="flex-end"
         >
-          <Link to="registrar">
+          <Link to="../registrar">
             <Button as="span" colorScheme="primary">
               Registrar transacción
             </Button>
