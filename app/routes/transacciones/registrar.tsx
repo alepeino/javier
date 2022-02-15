@@ -8,11 +8,17 @@ import {
   Stack,
   useId,
 } from '@chakra-ui/react'
-import type { ActionFunction, LoaderFunction } from 'remix'
+import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix'
 import { Form, redirect, useLoaderData } from 'remix'
 import { dateInYMD } from '~/lib/date'
 import { write } from '~/lib/sheets.server'
 import { transactionSchema } from '~/model/transaction'
+
+export const meta: MetaFunction = () => {
+  return {
+    title: `Transacciones - Registrar nueva`,
+  }
+}
 
 interface LoaderData {
   date: string | null

@@ -15,13 +15,19 @@ import {
 } from '@chakra-ui/react'
 import { addDays, subDays } from 'date-fns/fp'
 import { sumBy } from 'lodash/fp'
-import type { LoaderFunction } from 'remix'
+import type { LoaderFunction, MetaFunction } from 'remix'
 import { Link, useLoaderData, useTransition } from 'remix'
 import { TransactionTable } from '~/components/TransactionTable'
 import { dateInYMD, fromYMD } from '~/lib/date'
 import { currencyFormatter, dayFormatter } from '~/lib/intl-format'
 import { read } from '~/lib/sheets.server'
 import type { Transaction } from '~/model/transaction'
+
+export const meta: MetaFunction = ({ params }) => {
+  return {
+    title: `Transacciones - ${params.date}`,
+  }
+}
 
 interface LoaderData {
   date: string
