@@ -16,7 +16,7 @@ import { transactionSchema } from '~/model/transaction'
 
 export const meta: MetaFunction = () => {
   return {
-    title: `Transacciones - Registrar nueva`,
+    title: `Operaciones - Registrar nueva`,
   }
 }
 

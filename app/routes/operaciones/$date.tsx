@@ -25,7 +25,7 @@ import type { Transaction } from '~/model/transaction'
 
 export const meta: MetaFunction = ({ params }) => {
   return {
-    title: `Transacciones - ${params.date}`,
+    title: `Operaciones - ${params.date}`,
   }
 }
 
@@ -110,7 +110,7 @@ export default function TransactionsIndex() {
                 </StatNumber>
                 <StatHelpText id="title-description">
                   {transactions.length}{' '}
-                  {transactions.length > 1 ? 'transacciones' : 'transacción'}
+                  {transactions.length > 1 ? 'operaciones' : 'operación'}
                 </StatHelpText>
               </Stat>
 
@@ -120,7 +120,7 @@ export default function TransactionsIndex() {
             </Stack>
           ) : (
             <Text id="title-description">
-              No hay transacciones registradas en esta fecha
+              No hay operaciones registradas en esta fecha
             </Text>
           )}
 
@@ -130,7 +130,7 @@ export default function TransactionsIndex() {
                 as="span"
                 size="lg"
                 colorScheme="primary"
-                aria-label="Registrar transacción"
+                aria-label="Registrar operación"
                 icon={<AddIcon />}
                 borderRadius="100%"
                 position="absolute"
@@ -146,7 +146,7 @@ export default function TransactionsIndex() {
           >
             <Link to={registerHref}>
               <Button as="span" colorScheme="primary">
-                Registrar transacción
+                Registrar operación
               </Button>
             </Link>
           </Box>
